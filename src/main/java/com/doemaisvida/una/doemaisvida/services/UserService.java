@@ -7,6 +7,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -50,5 +51,10 @@ public class UserService {
         } catch (Exception e) {
             throw new DatabaseException("Erro ao salvar o usuário no banco de dados");
         }
+    }
+
+    public List<User> findAll(){
+        List<User> users = userRepository.findAll();
+        return users;
     }
 }

@@ -7,7 +7,7 @@ import org.springframework.data.annotation.Id;
 import java.util.Objects;
 import java.util.Optional;
 
-public class UserDto extends User {
+public class UserDto {
 
     @Id
     private Long id;
