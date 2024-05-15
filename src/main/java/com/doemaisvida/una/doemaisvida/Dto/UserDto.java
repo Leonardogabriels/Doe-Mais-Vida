@@ -13,7 +13,7 @@ public class UserDto {
     private Long id;
     private String name;
     private String bloodType;
-    private URL Photograph;
+    private String imgUrl;
 
     public UserDto(Optional<User> user) {
 
@@ -23,6 +23,7 @@ public class UserDto {
         this.id = user.getId();
         this.name = user.getName();
         this.bloodType = user.getBloodType();
+        this.imgUrl = user.getImgUrl();
     }
 
     public Long getId() {
@@ -46,6 +47,14 @@ public class UserDto {
     }
     public void setBloodType(String bloodType) {
         this.bloodType = bloodType;
+    }
+
+    public String getImgUrl() {
+        return imgUrl;
+    }
+
+    public void setImgUrl(String imgUrl) {
+        this.imgUrl = imgUrl;
     }
 
     @Override

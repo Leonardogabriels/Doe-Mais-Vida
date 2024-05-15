@@ -9,6 +9,7 @@ import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import org.hibernate.validator.constraints.URL;
 
 @Entity
 @Table(name = "users")
@@ -35,9 +36,11 @@ public class User {
 	@Column(name = "password_confirm")
 	private String passwordConfirm;
 
+	@Column(name = "blood_Type")
 	private String bloodType;
 	private String location;
 	private Double weight;
+	private String imgUrl;
 
 	public User() {
 	}
@@ -116,5 +119,13 @@ public class User {
 
 	public void setWeight(Double weight) {
 		this.weight = weight;
+	}
+
+	public String getImgUrl() {
+		return imgUrl;
+	}
+
+	public void setImgUrl(String imgUrl) {
+		this.imgUrl = imgUrl;
 	}
 }

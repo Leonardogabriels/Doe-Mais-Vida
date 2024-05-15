@@ -43,7 +43,7 @@ public class UserService {
         }
 
         if (!obj.getPassword().equals(obj.getPasswordConfirm())) {
-            throw new InvalidPasswordException("As senhas não coicidem");
+            throw new InvalidPasswordException("As senhas não correspondem");
         }
 
         try {
@@ -55,6 +55,35 @@ public class UserService {
 
     public List<User> findAll(){
         List<User> users = userRepository.findAll();
+        if(users == null){
+            throw new UserNotFoundException("impossivel acessar usuarios");
+        }else {
         return users;
+        }
+    }
+
+    public User update(Long id, User obj) {
+        Optional<User> userOptional = userRepository.findById(id);
+        if (userOptional.isPresent()) {
+            User user = userOptional.get();
+            updateData(user, obj);
+            return userRepository.save(user);
+        } else {
+            throw new UserNotFoundException("Usuário não encontrado");
+        }
+    }
+
+    private void updateData(User dataUp, User obj) {
+        dataUp.setName(obj.getName());
+        dataUp.setEmail(obj.getEmail());
+        dataUp.setLocation(obj.getLocation());
+        dataUp.setImgUrl(obj.getImgUrl());
+        if (Objects.equals(obj.getPassword(),obj.getPasswordConfirm())) {
+            dataUp.setPassword(obj.getPassword());
+            dataUp.setPasswordConfirm(obj.getPassword());
+        }else {
+            throw new InvalidPasswordException("Senha não correspondem");
+        }
+
     }
 }
