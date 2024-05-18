@@ -1,7 +1,6 @@
 package com.doemaisvida.una.doemaisvida.resources;
 
 
-import com.doemaisvida.una.doemaisvida.Dto.UserDto;
 import com.doemaisvida.una.doemaisvida.entitys.User;
 import com.doemaisvida.una.doemaisvida.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,8 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
-import java.util.List;
-import java.util.stream.Collectors;
+
 
 
 @RestController
