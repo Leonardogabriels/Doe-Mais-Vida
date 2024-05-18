@@ -26,13 +26,6 @@ public class UserResource {
 		User user = userService.login(User.getEmail(), User.getPassword());
 		return ResponseEntity.ok().body(user);
 	}
-	@GetMapping
-    public ResponseEntity<List<UserDto>> findAll (){
-		List<User> users = userService.findAll();
-		List<UserDto> userDtos = users.stream().map(x -> new UserDto(x)).collect(Collectors.toList());
-		return ResponseEntity.ok().body(userDtos);
-
-	}
 
 	@PostMapping
 	public ResponseEntity<User> createUser(@RequestBody User user ){

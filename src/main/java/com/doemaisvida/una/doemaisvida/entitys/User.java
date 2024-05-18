@@ -39,14 +39,14 @@ public class User {
 	@Column(name = "blood_Type")
 	private String bloodType;
 	private String location;
-	private Double weight;
+	private Integer cellPhone;
 	private String imgUrl;
 
 	public User() {
 	}
 
 	public User(Long id, String name, String email, String password, String passwordConfirm,
-				String bloodType, String location, Double weight) {
+				String bloodType, String location, Integer cellPhone) {
 		this.id = id;
 		this.name = name;
 		this.email = email;
@@ -54,7 +54,7 @@ public class User {
 		this.passwordConfirm = passwordConfirm;
 		this.bloodType = bloodType;
 		this.location = location;
-		this.weight = weight;
+		this.cellPhone = cellPhone;
 	}
 
 	public Long getId() {
@@ -113,12 +113,12 @@ public class User {
 		this.location = location;
 	}
 
-	public Double getWeight() {
-		return weight;
+	public Integer getCellPhone() {
+		return cellPhone;
 	}
 
-	public void setWeight(Double weight) {
-		this.weight = weight;
+	public void setCellPhone(Integer cellPhone) {
+		this.cellPhone = cellPhone;
 	}
 
 	public String getImgUrl() {
