@@ -1,13 +1,12 @@
 package com.doemaisvida.una.doemaisvida.services;
 
-import com.doemaisvida.una.doemaisvida.entitys.User;
+import com.doemaisvida.una.doemaisvida.entities.User;
 import com.doemaisvida.una.doemaisvida.repositorys.UserRepository;
 import com.doemaisvida.una.doemaisvida.services.exceptions.*;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 

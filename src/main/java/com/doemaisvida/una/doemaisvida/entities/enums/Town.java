@@ -1,4 +1,4 @@
-package com.doemaisvida.una.doemaisvida.entitys.enums;
+package com.doemaisvida.una.doemaisvida.entities.enums;
 
 public enum Town {
     BELO_HORIZONTE,

@@ -1,7 +1,7 @@
 package com.doemaisvida.una.doemaisvida.resources;
 
 
-import com.doemaisvida.una.doemaisvida.entitys.User;
+import com.doemaisvida.una.doemaisvida.entities.User;
 import com.doemaisvida.una.doemaisvida.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

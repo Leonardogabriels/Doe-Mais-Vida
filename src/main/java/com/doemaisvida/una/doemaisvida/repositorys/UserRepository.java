@@ -1,6 +1,6 @@
 package com.doemaisvida.una.doemaisvida.repositorys;
 
-import com.doemaisvida.una.doemaisvida.entitys.User;
+import com.doemaisvida.una.doemaisvida.entities.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
