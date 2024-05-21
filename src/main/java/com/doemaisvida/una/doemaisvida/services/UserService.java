@@ -5,6 +5,7 @@ import com.doemaisvida.una.doemaisvida.repositorys.UserRepository;
 import com.doemaisvida.una.doemaisvida.services.exceptions.*;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Objects;
@@ -16,12 +17,15 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     public User login(String email, String password) {
         Optional<User> userOptional = userRepository.findByEmail(email);
 
         if (userOptional.isPresent()) {
             User user = userOptional.get();
-            if (Objects.equals(user.getPassword(), password)) {
+            if (passwordEncoder.matches(password, user.getPassword())) {
                 return user;
             } else {
                 throw new InvalidPasswordException("Senha incorreta");
@@ -45,6 +49,10 @@ public class UserService {
             throw new InvalidPasswordException("As senhas não correspondem");
         }
 
+        String encryptedPassword = passwordEncoder.encode(obj.getPassword());
+        obj.setPassword(encryptedPassword);
+        obj.setPasswordConfirm(encryptedPassword);
+
         try {
             return userRepository.save(obj);
         } catch (Exception e) {
@@ -65,18 +73,22 @@ public class UserService {
 
     private void updateData(User dataUp, User obj) {
         dataUp.setName(obj.getName());
-        if(obj.getEmail() != null) {
+        if (obj.getEmail() != null) {
             dataUp.setEmail(obj.getEmail());
         }
         dataUp.setLocation(obj.getLocation());
         dataUp.setImgUrl(obj.getImgUrl());
         dataUp.setCellPhone(obj.getCellPhone());
-        if (Objects.equals(obj.getPassword(),obj.getPasswordConfirm())) {
-            dataUp.setPassword(obj.getPassword());
-            dataUp.setPasswordConfirm(obj.getPassword());
-        }else {
-            throw new InvalidPasswordException("Senha não correspondem");
-        }
 
+        if (obj.getPassword() != null && !obj.getPassword().isEmpty() &&
+                obj.getPasswordConfirm() != null && !obj.getPasswordConfirm().isEmpty()) {
+            if (Objects.equals(obj.getPassword(), obj.getPasswordConfirm())) {
+                String encryptedPassword = passwordEncoder.encode(obj.getPassword());
+                dataUp.setPassword(encryptedPassword);
+                dataUp.setPasswordConfirm(encryptedPassword);
+            } else {
+                throw new InvalidPasswordException("Senhas não correspondem");
+            }
+        }
     }
 }

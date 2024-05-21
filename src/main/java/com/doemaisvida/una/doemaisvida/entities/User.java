@@ -6,9 +6,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 
 @Entity
 @Table(name = "users")
@@ -23,6 +21,7 @@ public class User {
 	private String name;
 
 	@Email
+	@NotNull
 	@Column(unique = true)
 	private String email;
 
@@ -35,19 +34,24 @@ public class User {
 	@Column(name = "password_confirm")
 	private String passwordConfirm;
 
-	@Column(name = "blood_Type")
+	@Column(name = "blood_type")
 	private String bloodType;
+
 	private String location;
 
-	@Size(min = 20, max = 20)
-	private Integer cellPhone;
+	@NotNull
+	@Digits(integer = 15, fraction = 0)
+	@Column(name = "cell_phone")
+	private Long cellPhone;
+
+	@Column(name = "img_url")
 	private String imgUrl;
 
 	public User() {
 	}
 
 	public User(Long id, String name, String email, String password, String passwordConfirm,
-				String bloodType, String location, Integer cellPhone) {
+				String bloodType, String location, Long cellPhone) {
 		this.id = id;
 		this.name = name;
 		this.email = email;
@@ -114,11 +118,11 @@ public class User {
 		this.location = location;
 	}
 
-	public Integer getCellPhone() {
+	public Long getCellPhone() {
 		return cellPhone;
 	}
 
-	public void setCellPhone(Integer cellPhone) {
+	public void setCellPhone(Long cellPhone) {
 		this.cellPhone = cellPhone;
 	}
 
