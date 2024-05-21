@@ -1,6 +1,9 @@
 package com.doemaisvida.una.doemaisvida.entities.enums;
 
 public enum Town {
+
+    //está em desuso mas será implementado pra uma próxima feature
+
     BELO_HORIZONTE,
     BETIM,
     CONTAGEM,
