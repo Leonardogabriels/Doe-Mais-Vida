@@ -21,7 +21,9 @@ public class HospitalService {
     private CityRepository cityRepository;
 
     public List<Hospital> getHospitalsByCityName(String cityName) {
-        return hospitalRepository.findByCityName(cityName);
+        Optional<City> cityOptional = cityRepository.findByName(cityName);
+        City city = cityOptional.get();
+        return hospitalRepository.findByCityId(city.getId());
     }
     public Hospital insertHospital(Hospital hospital, String cityName) {
         Optional<City> cityOptional = cityRepository.findByName(cityName);

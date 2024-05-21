@@ -38,6 +38,8 @@ public class User {
 	@Column(name = "blood_Type")
 	private String bloodType;
 	private String location;
+
+	@Size(min = 20, max = 20)
 	private Integer cellPhone;
 	private String imgUrl;
 

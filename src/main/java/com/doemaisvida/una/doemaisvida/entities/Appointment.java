@@ -25,6 +25,10 @@ public class Appointment {
     @JoinColumn(name = "hospital_id")
     private Hospital hospital;
 
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
     public Appointment() {}
 
     public Appointment(String patientName, LocalDate appointmentDate, Hospital hospital) {

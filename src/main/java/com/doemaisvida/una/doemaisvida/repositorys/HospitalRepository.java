@@ -8,6 +8,6 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface HospitalRepository extends JpaRepository<Hospital, Long> {
-    @Query("SELECT h FROM Hospital h WHERE h.city.name = :cityName")
-    List<Hospital> findByCityName(@Param("cityName") String cityName);
+    List<Hospital> findByCityId(Long cityId);
+
 }

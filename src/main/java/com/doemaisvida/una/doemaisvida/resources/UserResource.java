@@ -20,8 +20,8 @@ public class UserResource {
     private UserService userService;
 
 	@PostMapping("/login")
-	public ResponseEntity<User> login(@RequestBody User User ){
-		User user = userService.login(User.getEmail(), User.getPassword());
+	public ResponseEntity<User> login(@RequestBody User login ){
+		User user = userService.login(login.getEmail(), login.getPassword());
 		return ResponseEntity.ok().body(user);
 	}
 
