@@ -1,6 +1,5 @@
 package com.doemaisvida.una.doemaisvida.resources;
 
-
 import com.doemaisvida.una.doemaisvida.entities.Appointment;
 import com.doemaisvida.una.doemaisvida.entities.City;
 import com.doemaisvida.una.doemaisvida.entities.Hospital;
@@ -9,6 +8,7 @@ import com.doemaisvida.una.doemaisvida.services.CityService;
 import com.doemaisvida.una.doemaisvida.services.HospitalService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -18,30 +18,36 @@ import java.util.Map;
 @RestController
 @RequestMapping(value = "/appointment")
 public class AppointmentResource {
+
     @Autowired
     private CityService cityService;
+
     @Autowired
     private HospitalService hospitalService;
+
     @Autowired
     private AppointmentService appointmentService;
 
     @GetMapping(value = "/cities")
-    public List<City> getAllCities() {
-        return cityService.getAllCities();
+    public ResponseEntity<List<City>> getAllCities() {
+        List<City> cities = cityService.getAllCities();
+        return ResponseEntity.ok().body(cities);
     }
 
     @PostMapping(value = "/cities")
-    public City createCities(@RequestBody City obj) {
-        return cityService.insertCity(obj);
+    public ResponseEntity<City> createCities(@RequestBody City obj) {
+        City createdCity = cityService.insertCity(obj);
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdCity);
     }
 
     @GetMapping(value = "/hospitals")
-    public List<Hospital> getHospitalsByCity(@RequestParam String cityName) {
-        return hospitalService.getHospitalsByCityName(cityName);
+    public ResponseEntity<List<Hospital>> getHospitalsByCity(@RequestParam String cityName) {
+        List<Hospital> hospitals = hospitalService.getHospitalsByCityName(cityName);
+        return ResponseEntity.ok().body(hospitals);
     }
 
     @PostMapping(value = "/hospitals")
-    public Hospital createHospital(@RequestBody Map<String, Object> payload) {
+    public ResponseEntity<Hospital> createHospital(@RequestBody Map<String, Object> payload) {
         if (!payload.containsKey("name") || !payload.containsKey("cityName")) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Falta 'nome' ou 'cityName' na requisição");
         }
@@ -52,12 +58,19 @@ public class AppointmentResource {
         Hospital hospital = new Hospital();
         hospital.setName(hospitalName);
 
-        return hospitalService.insertHospital(hospital, cityName);
+        Hospital createdHospital = hospitalService.insertHospital(hospital, cityName);
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdHospital);
     }
+
     @PostMapping
-    public Appointment createAppointment(@RequestBody Appointment appointment) {
-        return appointmentService.saveAppointment(appointment);
+    public ResponseEntity<Appointment> createAppointment(@RequestBody Appointment appointment) {
+        Appointment createdAppointment = appointmentService.saveAppointment(appointment);
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdAppointment);
     }
 
-
+    @GetMapping
+    public ResponseEntity<List<Appointment>> findAllAppointment(){
+        List<Appointment> appointments = appointmentService.findAllAppointment();
+        return ResponseEntity.ok().body(appointments);
+    }
 }

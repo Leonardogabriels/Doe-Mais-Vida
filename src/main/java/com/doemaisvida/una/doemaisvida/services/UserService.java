@@ -31,7 +31,7 @@ public class UserService {
                 throw new InvalidPasswordException("Senha incorreta");
             }
         } else {
-            throw new UserNotFoundException("Usuário não encontrado");
+            throw new ObjectNotFoundException("Usuário não encontrado");
         }
     }
 
@@ -67,7 +67,7 @@ public class UserService {
             updateData(user, obj);
             return userRepository.save(user);
         } else {
-            throw new UserNotFoundException("Usuário não encontrado");
+            throw new ObjectNotFoundException("Usuário não encontrado");
         }
     }
 
@@ -78,7 +78,9 @@ public class UserService {
         }
         dataUp.setLocation(obj.getLocation());
         dataUp.setImgUrl(obj.getImgUrl());
-        dataUp.setCellPhone(obj.getCellPhone());
+        if (obj.getCellPhone()!= null) {
+            dataUp.setCellPhone(obj.getCellPhone());
+        }
 
         if (obj.getPassword() != null && !obj.getPassword().isEmpty() &&
                 obj.getPasswordConfirm() != null && !obj.getPasswordConfirm().isEmpty()) {

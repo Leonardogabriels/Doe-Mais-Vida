@@ -2,6 +2,7 @@ package com.doemaisvida.una.doemaisvida.entities;
 
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 
 @Entity
 public class Post {
@@ -15,7 +16,9 @@ public class Post {
 
 	private String description;
 
+	@NotNull
 	@ManyToOne
+	@JoinColumn(name = "User_id")
 	private User user;
 
 	public Post() {
