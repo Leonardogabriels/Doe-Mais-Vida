@@ -33,7 +33,7 @@ public class UserResource {
 			@ApiResponse(responseCode = "404", description = "Usuário não encontrado"),
 			@ApiResponse(responseCode = "500", description = "Erro do Servidor Interno")
 	})
-	@PostMapping(value = "/login", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+	@PostMapping(value = "/login")
 	public ResponseEntity<User> login(@RequestBody Map<String, String> loginDetails){
 		String emailOrPhone = loginDetails.get("emailOrPhone");
 		String password = loginDetails.get("password");
