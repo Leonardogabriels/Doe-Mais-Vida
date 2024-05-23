@@ -20,8 +20,18 @@ public class UserService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    public User login(String email, String password) {
-        Optional<User> userOptional = userRepository.findByEmail(email);
+    public User login(String emailOrPhone, String password) {
+        Optional<User> userOptional = userRepository.findByEmail(emailOrPhone);
+
+        if (!userOptional.isPresent()) {
+
+            try {
+                Long phone = Long.parseLong(emailOrPhone);
+                userOptional = userRepository.findByCellPhone(phone);
+            } catch (ObjectNotFoundException e) {
+                throw new ObjectNotFoundException("Usuário não encontrado");
+            }
+        }
 
         if (userOptional.isPresent()) {
             User user = userOptional.get();

@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
-
+import java.util.Map;
 
 
 @RestController
@@ -20,10 +20,14 @@ public class UserResource {
     private UserService userService;
 
 	@PostMapping("/login")
-	public ResponseEntity<User> login(@RequestBody User login ){
-		User user = userService.login(login.getEmail(), login.getPassword());
+	public ResponseEntity<User> login(@RequestBody Map<String, String> loginDetails) {
+		String emailOrPhone = loginDetails.get("emailOrPhone");
+		String password = loginDetails.get("password");
+
+		User user = userService.login(emailOrPhone, password);
 		return ResponseEntity.ok().body(user);
 	}
+
 
 	@PostMapping
 	public ResponseEntity<User> createUser(@RequestBody User user ){
