@@ -1,4 +1,4 @@
-package com.doemaisvida.una.doemaisvida.config;
+package com.doemaisvida.una.doemaisvida.configs;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

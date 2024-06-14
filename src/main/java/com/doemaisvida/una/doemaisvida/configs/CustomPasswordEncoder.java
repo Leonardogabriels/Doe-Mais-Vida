@@ -1,4 +1,4 @@
-package com.doemaisvida.una.doemaisvida.config;
+package com.doemaisvida.una.doemaisvida.configs;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
