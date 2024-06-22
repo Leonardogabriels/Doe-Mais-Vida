@@ -20,21 +20,21 @@ public class ResourceExceptionsHandler {
         return ResponseEntity.status(status).body(stndError);
     }
     @ExceptionHandler(DatabaseException.class)
-    public ResponseEntity<StandardError> DatabaseIntegrid (DatabaseException e , HttpServletRequest request) {
+    public ResponseEntity<StandardError> databaseIntegrid (DatabaseException e , HttpServletRequest request) {
         String error = " Data Base error";
         HttpStatus status = HttpStatus.BAD_REQUEST;
         StandardError stndError = new StandardError(Instant.now(), status.value(), error, e.getMessage(), request.getRequestURI());
         return ResponseEntity.status(status).body(stndError);
     }
     @ExceptionHandler(UserAlreadyExistsException.class)
-    public ResponseEntity<StandardError> UserAlreadyExistsException (UserAlreadyExistsException e , HttpServletRequest request) {
+    public ResponseEntity<StandardError> userAlreadyExistsException (UserAlreadyExistsException e , HttpServletRequest request) {
         String error = " User already registered ";
-        HttpStatus status = HttpStatus.BAD_REQUEST;
+        HttpStatus status = HttpStatus.CONFLICT;
         StandardError stndError = new StandardError(Instant.now(), status.value(), error, e.getMessage(), request.getRequestURI());
         return ResponseEntity.status(status).body(stndError);
     }
     @ExceptionHandler(InvalidPasswordException.class)
-    public ResponseEntity<StandardError> InvalidPasswordException (InvalidPasswordException e , HttpServletRequest request) {
+    public ResponseEntity<StandardError> invalidPasswordException (InvalidPasswordException e , HttpServletRequest request) {
         String error = "passwords do not match ";
         HttpStatus status = HttpStatus.BAD_REQUEST;
         StandardError stndError = new StandardError(Instant.now(), status.value(), error, e.getMessage(), request.getRequestURI());
@@ -46,6 +46,14 @@ public class ResourceExceptionsHandler {
         String error = " Object Not found";
         HttpStatus status = HttpStatus.NOT_FOUND;
         StandardError stndError = new StandardError(Instant.now(),status.value(),error,e.getMessage(),request.getRequestURI());
+        return ResponseEntity.status(status).body(stndError);
+    }
+
+    @ExceptionHandler(LoginInvalidException.class)
+    public ResponseEntity<StandardError> loginInvalidException (LoginInvalidException e , HttpServletRequest request) {
+        String error = " User already registered ";
+        HttpStatus status = HttpStatus.BAD_REQUEST;
+        StandardError stndError = new StandardError(Instant.now(), status.value(), error, e.getMessage(), request.getRequestURI());
         return ResponseEntity.status(status).body(stndError);
     }
 }

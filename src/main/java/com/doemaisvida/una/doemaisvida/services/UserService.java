@@ -23,25 +23,21 @@ public class UserService {
     public User login(String emailOrPhone, String password) {
         Optional<User> userOptional = userRepository.findByEmail(emailOrPhone);
 
-        if (!userOptional.isPresent()) {
-
+        if (userOptional.isEmpty()) {
             try {
                 Long phone = Long.parseLong(emailOrPhone);
                 userOptional = userRepository.findByCellPhone(phone);
-            } catch (ObjectNotFoundException e) {
-                throw new ObjectNotFoundException("Usuário não encontrado");
+            } catch (NumberFormatException e) {
+                throw new LoginInvalidException("Usuário não encontrado");
             }
         }
 
-        if (userOptional.isPresent()) {
-            User user = userOptional.get();
-            if (passwordEncoder.matches(password, user.getPassword())) {
-                return user;
-            } else {
-                throw new InvalidPasswordException("Senha incorreta");
-            }
+        User user = userOptional.orElseThrow(() -> new LoginInvalidException("Usuário não encontrado"));
+
+        if (passwordEncoder.matches(password, user.getPassword())) {
+            return user;
         } else {
-            throw new ObjectNotFoundException("Usuário não encontrado");
+            throw new InvalidPasswordException("Senha incorreta");
         }
     }
 
