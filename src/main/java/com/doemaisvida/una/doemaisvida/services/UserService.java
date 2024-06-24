@@ -51,6 +51,10 @@ public class UserService {
             throw new UserAlreadyExistsException("Usuário já cadastrado");
         }
 
+        if (userRepository.existsByCellPhone(obj.getCellPhone())) {
+            throw new UserAlreadyExistsException("Celular já cadastrado");
+        }
+
         if (!obj.getPassword().equals(obj.getPasswordConfirm())) {
             throw new InvalidPasswordException("As senhas não correspondem");
         }
@@ -79,12 +83,12 @@ public class UserService {
 
     private void updateData(User dataUp, User obj) {
         dataUp.setName(obj.getName());
-        if (obj.getEmail() != null) {
+        if (obj.getEmail() != null && !userRepository.existsByEmail(obj.getEmail())) {
             dataUp.setEmail(obj.getEmail());
         }
         dataUp.setLocation(obj.getLocation());
         dataUp.setImgUrl(obj.getImgUrl());
-        if (obj.getCellPhone()!= null) {
+        if (obj.getCellPhone()!= null && !userRepository.existsByCellPhone(obj.getCellPhone())) {
             dataUp.setCellPhone(obj.getCellPhone());
         }
 
