@@ -1,0 +1,22 @@
+INSERT INTO City (name) VALUES ('Belo Horizonte');
+INSERT INTO City (name) VALUES ('Contagem');
+INSERT INTO City (name) VALUES ('Betim');
+INSERT INTO City (name) VALUES ('Santa Luzia');
+INSERT INTO City (name) VALUES ('Ribeirão das Neves');
+INSERT INTO City (name) VALUES ('Sabará');
+INSERT INTO City (name) VALUES ('Nova Lima');
+INSERT INTO City (name) VALUES ('Ibirité');
+INSERT INTO City (name) VALUES ('Pedro Leopoldo');
+INSERT INTO City (name) VALUES ('Vespasiano');
+
+INSERT INTO Hospital (name, city_id) VALUES ('Hospital das Clínicas', (SELECT id FROM City WHERE name='Belo Horizonte'));
+INSERT INTO Hospital (name, city_id) VALUES ('Hospital de Pronto Socorro João XXIII', (SELECT id FROM City WHERE name='Belo Horizonte'));
+INSERT INTO Hospital (name, city_id) VALUES ('Hospital Municipal de Contagem', (SELECT id FROM City WHERE name='Contagem'));
+INSERT INTO Hospital (name, city_id) VALUES ('Hospital Regional de Betim', (SELECT id FROM City WHERE name='Betim'));
+INSERT INTO Hospital (name, city_id) VALUES ('Hospital Municipal Madalena Calixto', (SELECT id FROM City WHERE name='Santa Luzia'));
+INSERT INTO Hospital (name, city_id) VALUES ('Hospital São Judas Tadeu', (SELECT id FROM City WHERE name='Ribeirão das Neves'));
+INSERT INTO Hospital (name, city_id) VALUES ('Hospital Nossa Senhora de Lourdes', (SELECT id FROM City WHERE name='Sabará'));
+INSERT INTO Hospital (name, city_id) VALUES ('Hospital Nossa Senhora de Lourdes', (SELECT id FROM City WHERE name='Nova Lima'));
+INSERT INTO Hospital (name, city_id) VALUES ('Hospital e Maternidade Municipal de Ibirité', (SELECT id FROM City WHERE name='Ibirité'));
+INSERT INTO Hospital (name, city_id) VALUES ('Hospital e Maternidade Municipal de Pedro Leopoldo', (SELECT id FROM City WHERE name='Pedro Leopoldo'));
+INSERT INTO Hospital (name, city_id) VALUES ('Hospital Risoleta Tolentino Neves', (SELECT id FROM City WHERE name='Vespasiano'));
