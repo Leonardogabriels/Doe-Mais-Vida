@@ -3,7 +3,6 @@ package com.doemaisvida.una.doemaisvida.resources;
 
 import com.doemaisvida.una.doemaisvida.entities.Post;
 import com.doemaisvida.una.doemaisvida.services.PostService;
-import com.doemaisvida.una.doemaisvida.services.exceptions.ObjectNotFoundException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
