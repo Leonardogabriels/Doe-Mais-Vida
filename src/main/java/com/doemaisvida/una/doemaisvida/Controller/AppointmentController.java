@@ -1,11 +1,7 @@
-package com.doemaisvida.una.doemaisvida.resources;
+package com.doemaisvida.una.doemaisvida.Controller;
 
 import com.doemaisvida.una.doemaisvida.entities.Appointment;
-import com.doemaisvida.una.doemaisvida.entities.City;
-import com.doemaisvida.una.doemaisvida.entities.Hospital;
 import com.doemaisvida.una.doemaisvida.services.AppointmentService;
-import com.doemaisvida.una.doemaisvida.services.CityService;
-import com.doemaisvida.una.doemaisvida.services.HospitalService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -13,14 +9,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping(value = "/appointment")
-public class AppointmentResource {
+public class AppointmentController {
 
 
     @Autowired

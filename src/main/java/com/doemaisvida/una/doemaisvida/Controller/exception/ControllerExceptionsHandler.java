@@ -1,4 +1,4 @@
-package com.doemaisvida.una.doemaisvida.resources.exception;
+package com.doemaisvida.una.doemaisvida.Controller.exception;
 
 import com.doemaisvida.una.doemaisvida.services.exceptions.*;
 import jakarta.servlet.http.HttpServletRequest;
@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import java.time.Instant;
 
 @ControllerAdvice
-public class ResourceExceptionsHandler {
+public class ControllerExceptionsHandler {
 
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<StandardError> resourceNotFound (ResourceNotFoundException e , HttpServletRequest request){

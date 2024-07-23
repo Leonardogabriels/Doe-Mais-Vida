@@ -1,4 +1,4 @@
-package com.doemaisvida.una.doemaisvida.resources;
+package com.doemaisvida.una.doemaisvida.Controller;
 
 
 import com.doemaisvida.una.doemaisvida.entities.User;
@@ -10,18 +10,16 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
-import java.util.Map;
 
 
 @RestController
 @RequestMapping(value = "/users")
 @Tag(name = "users")
-public class UserResource {
+public class UserController {
 
     @Autowired
     private UserService userService;

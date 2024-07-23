@@ -21,27 +21,6 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    public User login(String emailOrPhone, String password) {
-        Optional<User> userOptional = userRepository.findByEmail(emailOrPhone);
-
-        if (userOptional.isEmpty()) {
-            try {
-                Long phone = Long.parseLong(emailOrPhone);
-                userOptional = userRepository.findByCellPhone(phone);
-            } catch (NumberFormatException e) {
-                throw new LoginInvalidException("Usuário não encontrado");
-            }
-        }
-
-        User user = userOptional.orElseThrow(() -> new LoginInvalidException("Usuário não encontrado"));
-
-        if (passwordEncoder.matches(password, user.getPassword())) {
-            return user;
-        } else {
-            throw new InvalidPasswordException("Senha incorreta");
-        }
-    }
-
     @Transactional
     public User createUser(User obj) {
         if (obj == null) {
@@ -60,9 +39,8 @@ public class UserServiceImpl implements UserService {
             throw new InvalidPasswordException("As senhas não correspondem");
         }
 
-        String encryptedPassword = passwordEncoder.encode(obj.getPassword());
-        obj.setPassword(encryptedPassword);
-        obj.setPasswordConfirm(encryptedPassword);
+        obj.setPassword(passwordEncoder.encode(obj.getPassword()));
+        obj.setPasswordConfirm(passwordEncoder.encode(obj.getPasswordConfirm()));
 
         try {
             return userRepository.save(obj);

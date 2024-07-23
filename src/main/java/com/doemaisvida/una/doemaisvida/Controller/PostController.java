@@ -1,4 +1,4 @@
-package com.doemaisvida.una.doemaisvida.resources;
+package com.doemaisvida.una.doemaisvida.Controller;
 
 
 import com.doemaisvida.una.doemaisvida.entities.Post;
@@ -17,7 +17,7 @@ import java.util.List;
 @RestController
 @RequestMapping(value = "/posts")
 @Tag(name = "posts")
-public class PostResource {
+public class PostController {
 
 	@Autowired
 	private PostService postService;

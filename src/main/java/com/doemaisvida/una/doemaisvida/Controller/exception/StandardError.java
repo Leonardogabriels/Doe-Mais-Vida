@@ -1,4 +1,4 @@
-package com.doemaisvida.una.doemaisvida.resources.exception;
+package com.doemaisvida.una.doemaisvida.Controller.exception;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
