@@ -1,17 +1,11 @@
 package com.doemaisvida.una.doemaisvida.entities;
 
-import com.doemaisvida.una.doemaisvida.entities.enums.UserRoles;
+
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-
-import java.util.Collection;
-import java.util.List;
 
 @Entity
 @Table(name = "users")
@@ -31,6 +25,7 @@ public class User  {
 	@Email
 	@Column(nullable = false, unique = true)
 	private String email;
+
 
 	@NotNull
 	@Size(min = 6, max = 255)
