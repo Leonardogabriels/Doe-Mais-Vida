@@ -21,6 +21,8 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Autowired
+    private EmailServiceImpl emailService;
     @Transactional
     public User createUser(User obj) {
         if (obj == null) {
@@ -43,7 +45,11 @@ public class UserServiceImpl implements UserService {
         obj.setPasswordConfirm(passwordEncoder.encode(obj.getPasswordConfirm()));
 
         try {
-            return userRepository.save(obj);
+           User objs=  userRepository.save(obj);
+            emailService.sendEmail(obj.getEmail(),
+                    "Novo usuário cadastrado",
+                    "Seu cadastro em nosso site foi realizado com sucesso ");
+            return objs;
         } catch (Exception e) {
             throw new DatabaseException("Erro ao salvar o usuário no banco de dados");
         }
