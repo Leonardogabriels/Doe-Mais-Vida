@@ -2,6 +2,7 @@ package com.doemaisvida.una.doemaisvida.Controller;
 
 
 import com.doemaisvida.una.doemaisvida.entities.User;
+import com.doemaisvida.una.doemaisvida.security.jwt.JwtUtils;
 import com.doemaisvida.una.doemaisvida.services.UserService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -21,21 +22,28 @@ import java.net.URI;
 @Tag(name = "users")
 public class UserController {
 
-    @Autowired
-    private UserService userService;
+
+    private final UserService userService;
+	private final JwtUtils jwtTokenUtil;
+
+    public UserController(UserService userService, JwtUtils jwtTokenUtil) {
+        this.userService = userService;
+        this.jwtTokenUtil = jwtTokenUtil;
+    }
 
 
-
-	@Operation(summary = "criar usuario ", method = "POST")
+    @Operation(summary = "criar usuario ", method = "POST")
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200", description = "Usuário criado com sucesso"),
 			@ApiResponse(responseCode = "400", description = "Entrada inválida"),
 			@ApiResponse(responseCode = "500", description = "Erro do Servidor Interno")
 	})
+
 	@PostMapping
 	public ResponseEntity<User> createUser(@RequestBody User user ){
 		userService.createUser(user);
-		URI uri = ServletUriComponentsBuilder.fromCurrentRequestUri().path("/{id}").buildAndExpand(user.getId()).toUri();
+		URI uri = ServletUriComponentsBuilder.fromCurrentRequestUri().path("/{id}")
+		.buildAndExpand(user.getId()).toUri();
 		return ResponseEntity.created(uri).body(user);
 	}
 
@@ -46,9 +54,13 @@ public class UserController {
 			@ApiResponse(responseCode = "404", description = "Usuário não encontrado"),
 			@ApiResponse(responseCode = "500", description = "Erro do Servidor Interno")
 	})
-	@PutMapping(value = "/{id}")
-	public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody User user ){
-		User newUser = userService.update(id,user);
-		return ResponseEntity.ok().body(newUser);
+	@PutMapping
+	public ResponseEntity<User> updateUser(@RequestHeader("Authorization") String token,
+										   @RequestBody User user) {
+		String jwtToken = token.replace("Bearer ", "");
+		Long userId = jwtTokenUtil.getUserIdFromToken(jwtToken);
+		User updatedUser = userService.update(userId, user);
+		return ResponseEntity.ok().body(updatedUser);
 	}
+
 }
