@@ -1,11 +1,13 @@
 package com.doemaisvida.una.doemaisvida.services.impl;
 
+import com.doemaisvida.una.doemaisvida.DTO.UserCreateDTO;
+import com.doemaisvida.una.doemaisvida.DTO.UserDTO;
 import com.doemaisvida.una.doemaisvida.entities.User;
 import com.doemaisvida.una.doemaisvida.repositorys.UserRepository;
 import com.doemaisvida.una.doemaisvida.services.UserService;
 import com.doemaisvida.una.doemaisvida.services.exceptions.*;
+import com.doemaisvida.una.doemaisvida.services.mapper.UserMapper;
 import jakarta.transaction.Transactional;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -15,41 +17,55 @@ import java.util.Optional;
 @Service
 public class UserServiceImpl implements UserService {
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
 
-    @Autowired
-    private EmailServiceImpl emailService;
-    @Transactional
-    public User createUser(User obj) {
-        if (obj == null) {
-            throw new IllegalArgumentException("O objeto User fornecido é nulo");
-        }
+    private final EmailServiceImpl emailService;
 
-        if (userRepository.existsByEmail(obj.getEmail())) {
+    private final UserMapper userMapper;
+
+	public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder, EmailServiceImpl emailService, UserMapper userMapper) {
+		this.userRepository = userRepository;
+		this.passwordEncoder = passwordEncoder;
+		this.emailService = emailService;
+		this.userMapper = userMapper;
+	}
+
+	@Transactional
+    public UserDTO createUser(UserCreateDTO obj) throws UserAlreadyExistsException {
+
+        var user = userMapper.toUser(obj);
+        System.out.println(obj.toString());
+        System.out.println(user.toString());
+        if (obj == null || user == null) throw new IllegalArgumentException("O objeto User fornecido é nulo");
+
+        if (userRepository.existsByEmail(user.getEmail())) {
             throw new UserAlreadyExistsException("Usuário já cadastrado");
         }
 
-        if (userRepository.existsByCellPhone(obj.getCellPhone())) {
+        if (userRepository.existsByCellPhone(user.getCellPhone())) {
             throw new UserAlreadyExistsException("Celular já cadastrado");
         }
 
-        if (!obj.getPassword().equals(obj.getPasswordConfirm())) {
+        if (!user.getPassword().equals(user.getPasswordConfirm())) {
             throw new InvalidPasswordException("As senhas não correspondem");
         }
 
-        obj.setPassword(passwordEncoder.encode(obj.getPassword()));
-        obj.setPasswordConfirm(passwordEncoder.encode(obj.getPasswordConfirm()));
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setPasswordConfirm(passwordEncoder.encode(user.getPasswordConfirm()));
 
         try {
-           User objs=  userRepository.save(obj);
-            emailService.sendEmail(obj.getEmail(),
+           User objs=  userRepository.save(user);
+
+           //Implementar uma nova forma de e-mail, essa demora muito na requisição
+          /*  emailService.sendEmail(obj.getEmail(),
                     "Novo usuário cadastrado",
-                    "Seu cadastro em nosso site foi realizado com sucesso ");
-            return objs;
+                    "Seu cadastro em nosso site foi realizado com sucesso ");*/
+
+            var userDTO = userMapper.toUserDTO(user);
+			return userDTO;
+
         } catch (Exception e) {
             throw new DatabaseException("Erro ao salvar o usuário no banco de dados");
         }

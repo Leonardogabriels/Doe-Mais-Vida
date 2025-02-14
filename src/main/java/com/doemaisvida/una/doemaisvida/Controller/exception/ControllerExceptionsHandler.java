@@ -4,10 +4,15 @@ import com.doemaisvida.una.doemaisvida.services.exceptions.*;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @ControllerAdvice
 public class ControllerExceptionsHandler {
@@ -56,4 +61,37 @@ public class ControllerExceptionsHandler {
         StandardError stndError = new StandardError(Instant.now(), status.value(), error, e.getMessage(), request.getRequestURI());
         return ResponseEntity.status(status).body(stndError);
     }
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<StandardError> methodArgumentNotValidException(
+            MethodArgumentNotValidException e,
+            HttpServletRequest request) {
+
+        String error = "Erro de validação";
+        HttpStatus status = HttpStatus.BAD_REQUEST;
+
+        // Lista para armazenar os detalhes dos erros de campo
+        List<Map<String, String>> fieldErrors = new ArrayList<>();
+
+        // Extrair o campo e a mensagem de erro
+        e.getBindingResult().getFieldErrors().forEach(fieldError -> {
+            Map<String, String> errorDetail = new HashMap<>();
+            errorDetail.put("field", fieldError.getField());
+            errorDetail.put("message", fieldError.getDefaultMessage());
+            fieldErrors.add(errorDetail);
+        });
+
+        // Customizando a mensagem para incluir detalhes dos campos inválidos
+        String detailedMessage = fieldErrors.toString();
+
+        // Usando seu StandardError
+        StandardError stndError = new StandardError(
+                Instant.now(),
+                status.value(),
+                error,
+                detailedMessage,
+                request.getRequestURI());
+
+        return ResponseEntity.status(status).body(stndError);
+    }
+
 }

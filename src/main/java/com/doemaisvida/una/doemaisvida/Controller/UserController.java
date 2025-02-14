@@ -1,6 +1,8 @@
 package com.doemaisvida.una.doemaisvida.Controller;
 
 
+import com.doemaisvida.una.doemaisvida.DTO.UserCreateDTO;
+import com.doemaisvida.una.doemaisvida.DTO.UserDTO;
 import com.doemaisvida.una.doemaisvida.entities.User;
 import com.doemaisvida.una.doemaisvida.security.jwt.JwtUtils;
 import com.doemaisvida.una.doemaisvida.services.UserService;
@@ -9,6 +11,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -40,11 +43,11 @@ public class UserController {
 	})
 
 	@PostMapping
-	public ResponseEntity<User> createUser(@RequestBody User user ){
-		userService.createUser(user);
+	public ResponseEntity<UserDTO> createUser(@Valid @RequestBody UserCreateDTO user ){
+		var userDto = userService.createUser(user);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequestUri().path("/{id}")
-		.buildAndExpand(user.getId()).toUri();
-		return ResponseEntity.created(uri).body(user);
+		.buildAndExpand(userDto.getId()).toUri();
+		return ResponseEntity.created(uri).body(userDto);
 	}
 
 	@Operation(summary = "Atualizar um usuário existente", method = "PUT")
@@ -55,7 +58,7 @@ public class UserController {
 			@ApiResponse(responseCode = "500", description = "Erro do Servidor Interno")
 	})
 	@PutMapping
-	public ResponseEntity<User> updateUser(@RequestHeader("Authorization") String token,
+	public ResponseEntity<User> updateUser( @RequestHeader("Authorization") String token,
 										   @RequestBody User user) {
 		String jwtToken = token.replace("Bearer ", "");
 		Long userId = jwtTokenUtil.getUserIdFromToken(jwtToken);
