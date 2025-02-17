@@ -4,6 +4,8 @@ import com.doemaisvida.una.doemaisvida.services.exceptions.*;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -62,36 +64,28 @@ public class ControllerExceptionsHandler {
         return ResponseEntity.status(status).body(stndError);
     }
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<StandardError> methodArgumentNotValidException(
-            MethodArgumentNotValidException e,
-            HttpServletRequest request) {
-
+    public ResponseEntity<ValidationError> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex,HttpServletRequest request) {
         String error = "Erro de validação";
         HttpStatus status = HttpStatus.BAD_REQUEST;
+        BindingResult bindingResult = ex.getBindingResult();
+        Map<String, Object> errors = new HashMap<>();
 
-        // Lista para armazenar os detalhes dos erros de campo
-        List<Map<String, String>> fieldErrors = new ArrayList<>();
+        for (FieldError fieldError : bindingResult.getFieldErrors()) {
+            Map<String, Object> errorDetails = new HashMap<>();
+            errorDetails.put("rejectedValue", fieldError.getRejectedValue());
+            errorDetails.put("message", fieldError.getDefaultMessage());
+            errors.put(fieldError.getField(), errorDetails);
+        }
 
-        // Extrair o campo e a mensagem de erro
-        e.getBindingResult().getFieldErrors().forEach(fieldError -> {
-            Map<String, String> errorDetail = new HashMap<>();
-            errorDetail.put("field", fieldError.getField());
-            errorDetail.put("message", fieldError.getDefaultMessage());
-            fieldErrors.add(errorDetail);
-        });
-
-        // Customizando a mensagem para incluir detalhes dos campos inválidos
-        String detailedMessage = fieldErrors.toString();
-
-        // Usando seu StandardError
-        StandardError stndError = new StandardError(
+        ValidationError validationError = new ValidationError(
                 Instant.now(),
                 status.value(),
                 error,
-                detailedMessage,
-                request.getRequestURI());
+                "Erro nos campos especificados",
+                request.getRequestURI(),
+                errors
+        );
 
-        return ResponseEntity.status(status).body(stndError);
+        return ResponseEntity.status(status).body(validationError);
     }
-
 }

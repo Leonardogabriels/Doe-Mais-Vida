@@ -2,7 +2,6 @@ package com.doemaisvida.una.doemaisvida.entities;
 
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -18,22 +17,12 @@ public class User  {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@NotNull
-	@Column(length = 50)
 	private String name;
 
-	@Email
-	@Column(nullable = false, unique = true)
 	private String email;
 
-
-	@NotNull
-	@Size(min = 6, max = 255)
 	private String password;
 
-	@NotNull
-	@Size(min = 6, max = 255)
-	@Column(name = "password_confirm")
 	private String passwordConfirm;
 
 	@Column(name = "blood_type")
@@ -41,8 +30,6 @@ public class User  {
 
 	private String location;
 
-	@NotNull
-	@Digits(integer = 15, fraction = 0)
 	@Column(name = "cell_phone")
 	private Long cellPhone;
 
