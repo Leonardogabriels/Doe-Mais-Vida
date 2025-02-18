@@ -21,14 +21,12 @@ public class UserServiceImpl implements UserService {
 
     private final PasswordEncoder passwordEncoder;
 
-    private final EmailServiceImpl emailService;
 
     private final UserMapper userMapper;
 
-	public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder, EmailServiceImpl emailService, UserMapper userMapper) {
+	public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder,UserMapper userMapper) {
 		this.userRepository = userRepository;
 		this.passwordEncoder = passwordEncoder;
-		this.emailService = emailService;
 		this.userMapper = userMapper;
 	}
 
@@ -36,9 +34,9 @@ public class UserServiceImpl implements UserService {
     public UserDTO createUser(UserCreateDTO obj) throws UserAlreadyExistsException {
 
         var user = userMapper.toUser(obj);
-        System.out.println(obj.toString());
-        System.out.println(user.toString());
-        if (obj == null || user == null) throw new IllegalArgumentException("O objeto User fornecido é nulo");
+        if (user == null) {
+            throw new UserNullException("O objeto User fornecido é nulo");
+        }
 
         if (userRepository.existsByEmail(user.getEmail())) {
             throw new UserAlreadyExistsException("Usuário já cadastrado");
@@ -63,8 +61,7 @@ public class UserServiceImpl implements UserService {
                     "Novo usuário cadastrado",
                     "Seu cadastro em nosso site foi realizado com sucesso ");*/
 
-            var userDTO = userMapper.toUserDTO(user);
-			return userDTO;
+			return userMapper.toUserDTO(user);
 
         } catch (Exception e) {
             throw new DatabaseException("Erro ao salvar o usuário no banco de dados");

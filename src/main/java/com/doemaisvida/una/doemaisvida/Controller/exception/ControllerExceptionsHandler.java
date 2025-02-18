@@ -63,6 +63,13 @@ public class ControllerExceptionsHandler {
         StandardError stndError = new StandardError(Instant.now(), status.value(), error, e.getMessage(), request.getRequestURI());
         return ResponseEntity.status(status).body(stndError);
     }
+    @ExceptionHandler(UserNullException.class)
+    public ResponseEntity<StandardError> userNullException (UserNullException e , HttpServletRequest request) {
+        String error = " User Null ";
+        HttpStatus status = HttpStatus.BAD_REQUEST;
+        StandardError stndError = new StandardError(Instant.now(), status.value(), error, e.getMessage(), request.getRequestURI());
+        return ResponseEntity.status(status).body(stndError);
+    }
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ValidationError> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex,HttpServletRequest request) {
         String error = "Erro de validação";
