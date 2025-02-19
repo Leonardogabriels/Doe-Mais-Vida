@@ -70,6 +70,14 @@ public class ControllerExceptionsHandler {
         StandardError stndError = new StandardError(Instant.now(), status.value(), error, e.getMessage(), request.getRequestURI());
         return ResponseEntity.status(status).body(stndError);
     }
+
+    @ExceptionHandler(EmailException.class)
+    public ResponseEntity<StandardError> emailException (EmailException e , HttpServletRequest request) {
+        String error = " email already registered ";
+        HttpStatus status = HttpStatus.CONFLICT;
+        StandardError stndError = new StandardError(Instant.now(), status.value(), error, e.getMessage(), request.getRequestURI());
+        return ResponseEntity.status(status).body(stndError);
+    }
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ValidationError> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex,HttpServletRequest request) {
         String error = "Erro de validação";

@@ -3,8 +3,9 @@ package com.doemaisvida.una.doemaisvida.Controller;
 
 import com.doemaisvida.una.doemaisvida.DTO.UserCreateDTO;
 import com.doemaisvida.una.doemaisvida.DTO.UserDTO;
+import com.doemaisvida.una.doemaisvida.DTO.UserUpdateDTO;
 import com.doemaisvida.una.doemaisvida.entities.User;
-import com.doemaisvida.una.doemaisvida.security.jwt.JwtUtils;
+import com.doemaisvida.una.doemaisvida.services.TokenService;
 import com.doemaisvida.una.doemaisvida.services.UserService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -12,7 +13,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -27,12 +27,12 @@ public class UserController {
 
 
     private final UserService userService;
-	private final JwtUtils jwtTokenUtil;
+	private final TokenService tokenService;
 
-    public UserController(UserService userService, JwtUtils jwtTokenUtil) {
+    public UserController(UserService userService, TokenService tokenService) {
         this.userService = userService;
-        this.jwtTokenUtil = jwtTokenUtil;
-    }
+		this.tokenService = tokenService;
+	}
 
 
     @Operation(summary = "criar usuario ", method = "POST")
@@ -58,12 +58,12 @@ public class UserController {
 			@ApiResponse(responseCode = "500", description = "Erro do Servidor Interno")
 	})
 	@PutMapping
-	public ResponseEntity<User> updateUser( @RequestHeader("Authorization") String token,
-										   @RequestBody User user) {
-		String jwtToken = token.replace("Bearer ", "");
-		Long userId = jwtTokenUtil.getUserIdFromToken(jwtToken);
-		User updatedUser = userService.update(userId, user);
-		return ResponseEntity.ok().body(updatedUser);
+	public ResponseEntity<UserDTO> updateUser(@RequestHeader("Authorization") String token,
+											  @RequestBody @Valid UserUpdateDTO userDto) {
+		User user = tokenService.getUserFromToken(token);
+		UserDTO updatedUser = userService.update(user, userDto);
+		return ResponseEntity.ok(updatedUser);
 	}
 
+	//Criar metodo de atualização de senha
 }

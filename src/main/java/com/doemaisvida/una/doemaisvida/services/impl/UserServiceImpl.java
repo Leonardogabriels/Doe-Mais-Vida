@@ -2,6 +2,7 @@ package com.doemaisvida.una.doemaisvida.services.impl;
 
 import com.doemaisvida.una.doemaisvida.DTO.UserCreateDTO;
 import com.doemaisvida.una.doemaisvida.DTO.UserDTO;
+import com.doemaisvida.una.doemaisvida.DTO.UserUpdateDTO;
 import com.doemaisvida.una.doemaisvida.entities.User;
 import com.doemaisvida.una.doemaisvida.repositorys.UserRepository;
 import com.doemaisvida.una.doemaisvida.services.UserService;
@@ -68,21 +69,17 @@ public class UserServiceImpl implements UserService {
         }
     }
 
-    public User update(Long id, User obj) {
-        Optional<User> userOptional = userRepository.findById(id);
-        if (userOptional.isPresent()) {
-            User user = userOptional.get();
+    @Transactional
+    public UserDTO update(User user, UserUpdateDTO obj) {
             updateData(user, obj);
-            return userRepository.save(user);
-        } else {
-            throw new ObjectNotFoundException("Usuário não encontrado");
-        }
+            return userMapper.toUserDTO(user);
     }
 
-    private void updateData(User dataUp, User obj) {
-        dataUp.setName(obj.getName());
+    private void updateData(User dataUp,UserUpdateDTO obj) {
         if (obj.getEmail() != null && !userRepository.existsByEmail(obj.getEmail())) {
             dataUp.setEmail(obj.getEmail());
+        }else {
+            throw new EmailException("Já existe uma conta com o email: " + obj.getEmail() + " cadastrado, tente um diferenre");
         }
         dataUp.setLocation(obj.getLocation());
         dataUp.setImgUrl(obj.getImgUrl());
@@ -90,15 +87,5 @@ public class UserServiceImpl implements UserService {
             dataUp.setCellPhone(obj.getCellPhone());
         }
 
-        if (obj.getPassword() != null && !obj.getPassword().isEmpty() &&
-                obj.getPasswordConfirm() != null && !obj.getPasswordConfirm().isEmpty()) {
-            if (Objects.equals(obj.getPassword(), obj.getPasswordConfirm())) {
-                String encryptedPassword = passwordEncoder.encode(obj.getPassword());
-                dataUp.setPassword(encryptedPassword);
-                dataUp.setPasswordConfirm(encryptedPassword);
-            } else {
-                throw new InvalidPasswordException("Senhas não correspondem");
-            }
-        }
     }
 }
